@@ -1,0 +1,21 @@
+---
+created_at: 30/08/2011 15:00
+title: Melhorando seu eclipse
+
+Para aqueles que desenvolvem em grails 
+ * Baixe direto o Spring Source Tool Suite (STS) mais recente
+ * Quando o Dashboard do STS abrir marque os suporte a groovy e grails para instalação
+ * Para aqueles que desenvolvem com java e outros linguagens que usam o editor do eclipse default
+é possível baixar um plugin que julgo ser bem legal chamado "The Eclipse Color Theme Plugin" você pode encontra-lo http://www.eclipsecolorthemes.org/?view=plugin
+ou podem ir diretamente em "Help" → "Install New Software", pressione "Add Site" and coloque o nome "Eclipse Color Theme" e na url "http://eclipse-color-theme.github.com/update", então aguarde  atualização
+do eclipse quanto aos pacotes e instale-os.
+
+Para aqueles que desenvolvem em ruby-rails e pyton-django recomente fortemente o aptana studio 3 que pode ser baixado e em http://www.aptana.com/downloads/start
+ou usando o mesmo processo de instalação de plugin citado para o plugin do STS usando o link "http://download.aptana.com/studio3/plugin/install".
+"The Eclipse Color Theme Plugin" mas usando a url  "http://eclipse-color-theme.github.com/update"
+
+
+
+
+
+

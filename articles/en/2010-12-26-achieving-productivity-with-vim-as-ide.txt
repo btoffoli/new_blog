@@ -1,0 +1,473 @@
+--- 
+created_at: 10/09/2010 20:00
+title: Achieving Productivity with Vim as IDE
+updated_at: 13/09/2010 08:00
+slug_pt-BR: 2010-09-09-produtividade-com-vim-como-ide
+
+Finally I've got some time to finish translating my Vim original article in Portuguese (written in September/2010):
+
+I've long insisted on trying to use Java written IDEs like Netbeans, RubyMine, Aptana/Eclipse or IntelliJ IDEA
+for software developing. They are fine except that they use too much system resources and you never know when the
+next garbage collection will happen (usually in the greatest inspiration moment).
+
+I was so upset with memory usage (my 4GB RAM computer was swapping very often) and garbage collection that I decided
+to take 3 full days of my last holiday to learn how to get productivity with Vim. The result was good enough and here
+is the summary of what I could get from Vim and what I could not.
+
+Note 1: if you are already a Vim user, backup your configuration files before trying this setup.
+Note 2: I would like to thank [Michael Durrant](http://www.linkedin.com/groups?viewMemberFeed=&gid=22413&memberID=81276429)
+and Vim spelling support for [helping with translation](http://www.linkedin.com/groupAnswers?viewQuestionAndAnswers=&discussionID=28872877&gid=22413&commentID=22685243&trk=view_disc).
+
+## What to expect?
+
+- Light speed!
+- Auto-complete (with current setup, works well for HTML, CSS, XML, leaving the desire for others IDEs for Java)
+- Snippets
+- Tabbed editing
+- Recording Session
+- Auto-completion of words contained in the document 
+- Support for browsing RDoc (Ruby) 
+- File browser 
+- Fast file opening
+- View number of rows and "go to line n"; 
+- Switch to the definition of the class / method / tag under the cursor 
+- Spell check (getting spelling support for Netbeans was really hard when I tried to, while it is built-in for Vim 7 and easy to add new dictionaries)
+
+In addition to these features, I've got much more ones that I've never used on my prior IDEs experience, as shown in this article.
+
+## Installation
+
+Here are the install procedures tested on a Debian Unstable Linux distribution that should work almost seamless with Ubuntu too. In Windows,
+apparently the change is that the configuration directory of Vim is called "vimfiles" instead of ".vim". If you have any questions about the
+installation process, just post a comment.
+
+You need to be root (or use sudo in Ubuntu) for installing the required packages.
+
+@@@ term
+apt-get install ruby-dev exuberant-ctags vim-gtk git
+cd
+git clone --recursive git://github.com/rosenfeld/vimfiles.git .vim
+ln -s .vim/vimrc .vimrc
+cd .vim/bundle/command-t/ruby/command-t
+ruby extconf.rb
+make
+@@@
+
+Some additional notes in case you have any issues with the above steps or are just curious:
+
+- If you have RVM installed, you should use your system Ruby for compiling Command-T support (rvm --system) because the Ruby version must be
+  the same to which Vim Ruby support was compiled against.
+- If you further install gitk and git-gui, there are shortcuts for launching them from Vim.
+- Gnome users might prefer installing vim-gnome instead of vim-gtk. Installing Vim with Ruby support is essential for being able to use the
+  Command-T script (fast file opening). Non-GUI Vim doesn't seem to be compiled with Ruby support in Ubuntu. Also, some shortcuts (like Ctrl+S)
+  won't work on Vim when running in some terminal emulator as Konsole or gnome-terminal because they will capture the shortcuts before Vim can
+  handle them and gVim is recommended instead.
+- The exuberant-ctags package is required for tag navigation...
+
+## Features
+
+Vim has much more features than what I'll introduce on this article. I would suggest reading other resources on the subject if you have some free time.
+
+### Basics
+
+#### Editing, saving, navigation and quiting
+
+Unlike other editors, Vim has different modes. It starts in Normal mode, in which typed chars are interpreted as commands. Pressing 'i' or 'Insert',
+enter Vim in insert mode, from which you can type anything. To exit insert mode, just press 'Escape'.
+
+Most commands are available through a command line that shows up when a colon (':') is pressed. Some of them are:
+
+- ':q': Quit without saving. Vim will warn you instead of leaving when any changes are unsaved.
+- ':w': Write buffer to current file (save the file).
+- 'Ctrl+x, s': Save current file, while on Insert mode.
+- ':x' or ':wq' or 'ZZ': Quit saving changes.
+- ':q!': Quit discarding changes.
+- ':qa': Quit closing all buffers (read "files", for simplicity sake). Actually, prior commands will only act on current buffer.
+- ':e path/to/file': Open file in the current window (auto-complete is achieved with the TAB key). If a relative path is given,
+  the current Vim directory (':pwd' will show it) is used. This can be changed with the ':cd /new/path' command or ':lcd' for
+  changing the path just for current window (more on windows later).
+- ',f path/relative/to/file': ',f' expands current file path and puts you on the command line
+- ':tabe' and ',t': the same thing bug open file in a tab instead of the current window.
+- 'Ctrl+PageUp/PageDown': navigate through tabs (may not work on terminal Vim)
+- ':tabnew': Open an empty buffer on a new tab
+- ':e!': Discard file changes and load last saved content
+- 'w': Position the cursor to the beginning of next word
+- 'e': Position the cursor to the end of next word
+- 'b': Position the cursor backward to the beginning of the word
+- ',w' and ',b': The same considering CamelCase words
+- '0': Position the cursor at start of current line
+- '^': Position the cursor at the first non-blank character of the current line
+- '$': Position the cursor at the end of the line
+- '%': Go to the corresponding pair of '[]', '()' and '{}'
+- 'gg': Go to the beginning of current buffer (document)
+- 'G': Go to the end of buffer
+- '45G': Go to line 45
+- '~': Change the case of the letter under cursor
+- 'u': Undo
+- 'Ctrl-r': Redo
+- '.': repeat last command
+- 'J': join lines
+- Ctrl+e: scrolls one line down without moving the cursor
+- Ctrl+y: scrolls one line up without moving the cursor
+
+On insert/editing mode, you can call normal mode commands by pressing Ctrl+O before the command. While on
+normal mode, it is possible to change to insert mode using some commands:
+
+- i: doesn't change current cursor position
+- I: position the cursor in the beginning of the line
+- o: appends a new line below the current line
+- O: appends a new line above the current line
+- a: position the cursor one character after current cursor position
+- A: position the cursor at the end of current lines
+ 
+Commands for deleting lines, words, blocks, managing surrounds and toggling comments:
+
+- dd: delete current line (actually, moves it to Vim internal clipboard)
+- D: delete until the end of the line
+- x or Delete: deletes a character under cursor
+- Backspace: deletes a character backward
+- dw: delete from current cursor until the end of the word under cursor
+- diw: delete inner word (the entire word under the cursor)
+- db: delete until the beginning of the word or a word backward if the cursor is already in the beginning of some word
+- ds', ds", ds{, ds[, ds(: delete surrounds ('', "", {}, (), [])
+- dst: delete surrounding tag
+- di', di", di{, di[, di(: delete content inside the given surround
+- da', da", da{, da[, da(: delete all content of the given surround, including the surround characters
+- dit: delete inner tag content
+- cs*: works like ds*, but replacing the surround instead of deleting them. For instance, ci"' will turn "text" into 'text'.
+  ci"t&lt;div&gt; will result in &lt;div&gt;text&lt;/div&gt;...
+- yss*: apply surround around the entire line. Ex.: yss' will apply an apostrophe around the line, while yss&lt;div&gt; will surround the line with a div tag.
+- s*: adds a surround while on visual mode (click and drag with mouse or press 'v' to ender visual mode and use the movement commands)
+- ys&lt;movement command&gt;: applies surround around the region described by the movement command. Ex.: With cursor under "word" ysiw&lt;span&gt; results in &lt;span&gt;word&lt;/span&gt;
+- C, cw, ciw, cb, ci*, etc: Works like the delete commands but finish the command on insert mode (c stands for change)
+- gv: Reselect last visual selection
+- \c&lt;space&gt;: toggle line (or block in visual mode) commenting
+- ggdG: [d]eletes entire buffer - from beginning [gg] to end [G] of the document
+
+#### Copy and paste
+
+In normal mode (don't use ':'):
+
+- yy: copy (yank) current line to clipboard
+- p: paste content from clipboard
+- yyp: duplicate current line
+- ':%y': copy the whole buffer (document) for internal use in Vim, only
+- ':%y+': copy the whole document to system clipboard
+- ':%y*': the * register is a clipboard register associated with the middle button on *nix systems. This command copies the document to this clipboard area.
+- "+yy (or Ctrl+X, c): copy current line to the system clipboard (register +)
+- "*yy: copy current line to the middle-click associated clipboard (register *)
+- Ctrl+R,+ (ou Ctrl+X, v) e Ctrl+R * (ou Ctrl+X, b): paste from system clipboard and middle-click clipboard respectively
+- Ctrl+C: In visual mode, copy selection to system clipboard
+
+In visual mode, 'y' copies the selection, while '"+y' / '"*y' copy the content to registers + and *.
+
+### Windows and Tabs
+
+I've already commented about basic tabs-related commands. Further commands follow below:
+
+- Ctrl+w, s: (Press Ctrl+w, then 's') - split window horizontally
+- Ctrl+w, v: (Press Ctrl+w, then 'v') - split window vertically
+- Ctrl+w, c: Close current buffer or tab if has a single window
+- Ctrl+w, o: Keep Only current window on tab, closing the others
+- Ctrl+w, w: Alternate to next window
+- Ctrl+w, arrow key: Alternate to window pointed by the arrow key
+- Ctrl+w, T: Note the capital T. Move current buffer to a new tab
+
+### Quick file open
+
+The '\t' shortcut activates the quick open file dialog (actually, the shortcut is <Leader>t, but usually the Leader key is mapped to '\').
+
+Vim will list files in your current dir (launch ':pwd' command to see what is it and ':cd ~/new/path' to change to a new path).
+While you type, files are filtered considering the typed expression. For instance, 'a/c/uc' will list 'app/controllers/user_controller.rb' as an option.
+
+Hit Enter to open the file in the current buffer. Ctrl+t will open it in a new tab. Ctrl+Enter will open in a new window.
+
+### Snippets
+
+Snippets are expanded with the TAB key. For instance, div&lt;TAB&gt; will expand to &lt;div id="?"&gt;?&lt;/div&gt;.
+
+The bundled snippets are located in ~/.vim/bundle/snipmate/snippets and ~/.vim/bundle/rosenfeld/snippets.
+
+Feel free to modify them and include new ones on bundle/*/snippets and ~/.vim/snippets.
+
+### Editing HTML, XML, ERB, ASP, JSP, PHP, GSP, etc
+
+Shortcuts for working with HTML/XML also work on PHP, ASP, ERB, JSP, etc, once the file type is properly configured like "html.erb".
+This can be achieved with command ":set ft=html.erb", for ERB files, for instance. You can also set these associations automatically
+according to file extension. See some examples in ~/.vim/filetype.vim.
+
+Some shortcuts for working on HTML have been already discussed. Here are some more shorcuts, for being used on insert mode:
+
+- Ctrl+x, /: Closes the last open tag.
+- Ctrl+x, space: convert word in a tag and put the cursor inside it. Ex.: div&lt;C-x&gt;&lt;space&gt; results in &lt;div&gt;|&lt;/div&gt;, where '|' denotes the final cursor position
+- Ctrl+x, Enter: similar to prior command, but with a line break between the tag start and its end
+- Ctrl+x, ': creates to a comment tag
+- Ctrl+x, ": comment current line
+- Ctrl+x, !: open a menu with DOCTYPE choices to choose from to insert on document
+- Ctrl+x, @: inserts a stylesheet tag
+- Ctrl+x, #: inserts a meta tag with charset=utf8
+- Ctrl+x, $: inserts a script tag for the Javascript language
+
+For template files, like ERB, JSP, PHP, etc:
+
+- Ctrl+x, =: &lt;%= | %&gt; or the equivalent for the file format
+- Ctrl+x, -: &lt;% | %&gt; or the equivalent for the file format
+
+For ERB (Ruby), I've created the following alternative snippets:
+
+- re: &lt;%= | %&gt;
+- rc: &lt;% | %&gt;
+
+If you use KDE, it's possible to launch kcolorchooser for returning a hex color into the document (a CSS, for instance),
+hitting F12. Take a look at ~/.vim/initializers/kcolorchooser-mapping.vim for changing your software of choice.
+
+### Spelling check
+
+Commands:
+
+- spen: enable spelling check for English
+- ':set nospell': disable spelling check
+- z= or right-clicking the word: open a menu with spelling correction suggestions to choose one from
+- Ctrl+x, s: the same while on insert mode
+- ]s: next misspelled word
+- [s: prior misspelled word
+- zg: add word under cursor as a Good word. The word is added to a local dictionary, which can be configured with the spellfile variable (":set spellfile=~/.vim/spell/custom")
+- zw: mark word as wrong, commenting it on the spellfile if it already appears there
+- zG and zW: the same, but doesn't persist changes, making them valid only in the current Vim session
+- zug, zuw, zuG e zuW: undo related command
+- ':spellr': repeat the replacement done by z= for all matches with the replaced word in the current window
+
+### Tags
+
+There are some alternatives for working with tags in Vim:
+
+#### Plugin tag-list
+
+Commands:
+
+- F8: Alternate tag window with tags created from current buffer or those found by the following command:
+- ':TlistAddFilesRecursive . *.rb *.js': This creates a tags list for all ruby and javascript files from current project (see :pwd).
+
+#### Native support integrated to ctags program (provided by exuberant-ctags, for instance)
+
+For this to work, you must create a "tags" file in the current directory. Take a look at the output of "ctags --list-languages" to see the supported languages:
+
+@@@ term
+ctags -R --languages=Ruby,Javascript
+@@@
+
+Then, use the following commands for jumping to tag definition of the word under cursor:
+- Ctrl+] or Ctrl+&lt;LeftMouse&gt; or g&lt;LeftMouse&gt;: jump to definition in current window
+- Ctrl+T or Ctrl+&lt;RightMouse&gt; or g&lt;RightMouse&gt;: go back to position before jump
+- Ctrl+w, ]: split horizontally and jump to tag definition
+- g, Ctrl+] and Ctrl+w, g, ]: presents a list of definitions before jumping if there are multiple definitions
+- ':tag TagName': go to 'TagName' tag definition
+- ':ts TagName': open a list with found definitions to choose from
+- Ctrl+\: go to definition in a new tab
+
+### Indenting
+
+Commands:
+
+- ==: indents current line
+- =: in visual mode, indents the selected block
+- gg=G: go to beginning of the buffer (gg) and indents (=) until the end of buffer (G)
+- < and >: indents a block (in visual mode) to left or right. Press '.' to repeat last indenting and 'u' to undo.
+
+### Finding and Replacing
+
+Commands:
+
+- F4: replace text in interactive mode
+- /search_pattern: Find next match. Examples: "/function" or "/\d\\{4}-\d\\{2}-\d\\{2}" to locate some date like "1981-06-13"
+- ?search_pattern: Find match backward.
+- n: repeat the next '/' or '?' command.
+- N: same as 'n' but in reverse direction.
+- ':%s/text/other/': Replace 'text' by 'other' in the whole document (some commands accepts ranges and % stands for the whole
+  document range - see ':h range')
+- ':s/text/other/': Replace 'text' by 'other' in the current line. Actually, any character can be used instead of '/', like 's.7/11/2010.11/7/2010.'
+- ":'&lt;,'&gt;s/text/other/": Replace 'text' by 'other' in the last visual selection.
+  '&lt; and '&gt; are the markers for the beginning and ending of the visual selection. Pressing ':' while on visual mode, these markers are
+  automatically inserted in the command line.
+- &amp;: repeat last substitution command
+- ':Rgrep word *.rb': search for 'word' recursively in all '*.rb' files in the project. The ':vimgrep' command can also be used if the external
+  programs 'grep' and 'find' aren't available but the search will be much slower. There are also other differences - take a look at ':h vimgrep'.
+  For instance, you can open the file in the matched line by typing ':cc 33' (go to 33th result, numbers are listed with ':cl'). Ex.:
+  ':vimgrep word **/*.rb'
+
+### Markers
+
+Commands:
+
+- ma: mark current position in the 'a' register. Any letter can be used as a register name.
+- 'a: go to register 'a' mark
+- '' (two simple quotes): go to the position before the latest jump
+- Ctrl+O, Ctrl+i: go to the prior and next positions
+
+### Changes list
+
+Commands:
+- ':changes': list all changes in the current buffer
+- g;: go to the last change
+- g,: go to next change
+- 4g;: go to the change #4 (numbers are displayed by the ':changes' command)
+
+### Navigation among buffers
+
+Commands:
+
+- Ctrl+x Ctrl+x: in any mode, opens a window presenting the opened buffers to switch to (press 'q' to cancel or 'Enter' to choose an option)
+
+### File tree navigation
+
+- Ctrl+n: alternate file navigation window
+- \n: the same but expand the tree in the location of the file being currently edited
+- ':e.': replace current window by a file browser starting in the project root, that allows you to choose any file to open in the current window
+- ':Ex': the same but uses the current file path as the start location
+
+File tree shortcuts:
+
+- Enter: open the file in a new horizontal split or in the same window if the file is not modified
+- t: open in a new tab
+- ?: list the other shortcuts
+
+### External commands
+
+For running an external command:
+
+- ':! git gui&': execute 'git gui' in background (doesn't work on Windows, of course)
+- ':.! ls *.txt': replaces current line with the output of the command 'ls *.txt'
+- ':+! ls *.txt': creates a new line below the current line with the output of the command 'ls *.txt' (use '-' instead for creating the line above the current line)
+
+### Git integration
+
+- \g: Starts the git gui for the current project (doesn't work on Windows currently). Use ':lcd ~/project/path' for changing the project directory in the current window,
+  or ':cd' for changing the path for the hole vim session
+- \k: Starts gitk in background (doesn't work on Windows)
+
+See $VIMHOME/bundle/vcscommand/doc/vcscommand.txt for other commands. For instance:
+- \cd: show the diff for the current file in a new horizontal split
+- \cr: review the last committed version of the file in a new window
+
+Suppose you want to know what are the differences from your current unsaved changes and the original file:
+- \cr: split the original version in a new horizontal split. If you want the split to be vertical, you can move the window to the left (Ctrl+w, H) or right (Ctrl+w, L).
+  H and L must be capital.
+- run ':diffthis' in both windows: see next topic on diff.
+
+You can also take a look at $VIMHOME/bundle/fugitive/doc/fugitive.txt for further git shortcuts, like:
+- ':Gstatus': show the output of 'git status' and allows you to stage or unstage files under cursor pressing '-',
+  or viewing the diff in a vertical window (pressing 'D') or in a horizontal window (pressing 'dh').
+- ':Gcommit', ':Gblame' and ':Gmove' are other self-explanatory examples. Take a look at fugitive documentation for more details.
+
+### Viewing files difference
+
+Open at least two windows with the text you want to see the differences and type ':diffthis' on each window.
+For turning the diff off, type ':diffoff'. Use 'dp' in one highlighted diff for putting it in the other window
+or 'do' to obtain the difference content from the other window.
+Use '[c' and ']c' for navigating backwards and forwards to the next start of a change. See ':h diff' for more details.
+
+### Getting vim help
+
+- ':h' or F1: open the Vim main help
+- ':h command': open the command help in a the help window
+- Ctrl+]: open a link in the help
+- Ctrl+T: go back to the prior help position
+
+### Ruby specifics (Rspec, RDoc, etc)
+
+Commands (won't work in some terminals, use gVim or MacVim):
+
+- Ctrl+s, r: get the RDoc for the word under cursor
+- Ctrl+s, s: run rspec in the current opened spec
+- Ctrl+s, x: alternate between spec and model
+
+Rails commands (use tab for auto-complete most commands):
+
+- ':Rview users/list.erb': open the view
+- ':Rcontroller users' and ':Rmodel user' are similar commands
+- 'gf': when pressed over a line such as 'render "users/list"' will open 'users/list.erb' for instance.
+  When pressed over the 'ApplicationController' word, it will take you to 'application_controller.rb'.
+- ':R': Alternate between the controller action and the view when you follow the conventions.
+
+Debugging:
+
+You need to install the 'ruby-debug-ide19' or 'ruby-debug-ide' gem for this to work:
+
+- ':Rdebugger bin/ruby_script' or 'Rdebugger script/rails server' for a Rails application
+- \db: alternate breakpoint
+- \dn: step over
+- \ds: step into
+- \df: step out
+- \dc: continue
+- \dv: open variables window
+- \dm: open breakpoints window
+- \dt: open backtrace window
+- \dd: remove all breakpoints
+- ':RdbEval User.count' will evaluate 'User.count'
+- ':RdbCommand where' will send the 'where' command to rdebug
+- ':RdbCond user.admin?' will set the condition 'user.admin?' to the breakpoint
+- ':RdbCatch Errno::ENOENT' will catch the file not found exception, jumping to the file line of the exception,
+  allowing you to investigate the stack-trace, variables, etc.
+- ':RdbStop' stops the debugger
+
+### Refactoring
+
+Although Vim doesn't allow you to directly refactor some variable for instance (at least, I don't know how to do that in Vim),
+it can help you refactoring your code in many ways, from substitution commands to variable extraction like the example above:
+
+Suppose you want to refactor the code below as follows:
+
+@@@ ruby
+  if User.find(params[:id]) and current_user.admin?
+  # ...
+  end
+@@@
+
+to:
+
+@@@ ruby
+  @user = User.find(params[:id])
+  raise NotFoundException unless @user and current_user.admin?
+  # ...
+@@@
+
+For extracting the "User.find(params[:id])" to the "@user" variable, you can position the cursor under the "U" and run the
+commands "c% @user" (change the content "User.find(params[:id])" with "@user"), "Ctrl+o, O" (execute the 'O' command while
+on insert mode [Ctrl+o] - create a new line above the current), "@user = " (just typing), 'Ctrl+R "' (paste the cut content).
+
+With all these explanations, it may seem hard, but take a look at how we can achieve this with so few keystrokes: 
+<span style="background: yellow">c% @user <Ctrl+O>O @user = <Ctrl+R>"</span>.
+
+Learning how to use Vim in its full power will allow you to do many tasks quicker than any other editor or IDE in the overall.
+For instance, RubyMine will allow you to do the same with less keystrokes for this specific case, but for special cases, Vim
+will still be more useful and not much less productive than RubyMine for this common case. Actually, cutting "User.find(params[:id])"
+is much faster in Vim ("c%") than selecting the whole text in RubyMine or any other IDE. The same apply for change the content inside
+quotes, parenthesis, XML tags, etc among other features.
+
+## What doesn't work?
+
+Unfortunately, I couldn't find every feature I wanted in Vim yet. Some of them present on regular IDEs include:
+
+- Except from Ruby, integrated debugging is probably missing for most languages
+- Recent tab navigation using Ctrl+Tab like usually work in most IDEs
+- Seamless integration with the system clipboard, unless using vim in 'easy' mode with 'evim' or 'vim -y' commands
+- For Java development, traditional IDEs like Netbeans, Eclipse or IntelliJ are more competent with auto-completion and
+  other language features
+- Jumping to a tag in an existent tab, or open in a new one (currently I could just open in a new one). Maybe we should get used to work with buffers instead of tabs in Vim
+- Integration with the Rails i18n infrastructure with the default backend. Rubymine has a great integration and a friend of mine has also developed something similar as a Netbeans
+  [plugin](http://luiszandonadi.heroku.com/en/articles/netbeans/2010-07-11-i18n-rails-with-netbeans)
+
+## More to come
+
+There are still more useful commands like folding and other interesting features that I'll comment when I have more time available.
+
+I've already commented about several commands and I suggest you to start learning those that you use more often, like snippets,
+simple search and replace, quick file opening, tabs usage and buffer navigation. For those that work with HTML, I would recommend
+taking a look at the "surround" plug-in, that are specially useful for working with XML/HTML tags.
+
+As a last keynote, this article was written with Vim in the Markdown format. Many of these examples include tags and for escaping
+them in the document, I've used the command ':%HTMLSpecialChars' from the plug-in 'htmlspecialchars'.
+
+If you can take some time to improve your Vim skills it will save you many coding time during your coder life.
+
+Good advantage and have fun!

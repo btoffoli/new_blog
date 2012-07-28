@@ -1,0 +1,126 @@
+---
+created_at: 15/08/2011 22:00
+title: Manipulação direta do criteria dentro criteria builder
+updated_at: 24/08/2011 18:30
+
+Há algum tempo venho me deparando com situações em que se torna necessário a utilização do criteria no CriteriaBuilder
+do GORM (Ferramenta ORM do framework GRAILS). Bom para aqueles que não estão familiarizados com que foi falado sugiro
+ler por groovy, grails e gorm.
+<br>
+
+Neste momento você deve estar se perguntando o porquê e onde utilizar esta técnica, 
+pois bem descreverei situações em que será necessário manipula-lo e como fazer.
+<br>
+
+Suponha uma consulta de um domínio de pessoa <--> *endereco, na qual eu queira trazer todas pessoas que não 
+possuam um determinado endereço ou a mesma não possua endereço algum. Vamos então ao exemplo hitotético 
+do projeto de teste que eu criei(git://github.com/btoffoli/grailsTeste.git). Logo imagine que eu queira trazer 
+pessoas que possuam o endereço com uf diferente de 'Estado_1' ou pessoas que não possuam endereço algum. 
+Algumas pessoas tentariam fazer da seguinte forma usando a DSL criteriaBuilder do grails.
+<br>
+@@@ js
+/*imports necessário p/ executar os testes no grails console*/
+import org.hibernate.criterion.*
+import org.hibernate.*
+import grailsteste.*
+@@@
+
+<br>
+Ao tentar executar o código abaixo no grails console você verá que o resultado esperado passou longe do correto, isso porque 
+a relação é um para muitos de pessoa para endereço, neste caso não fazendo sentido eu dizer que no relacionamento
+tenha a lista de endereços seja nula.
+<br>
+
+@@@ js
+Pessoa.withCriteria{
+  or{
+    enderecos{
+      ne 'uf', 'Estado_1'      
+    }
+    isNull 'enderecos'
+  }  
+} 
+@@@
+<br>
+
+Repare que mesmo que eu retire a obrigação de trazer também pessoas que não contenham endereço algum, conceitualmente a 
+consulta poderia trazer resultados indesejáveis, isso porque quando chamei pelo método 'enderecos' a consulta gerada é 
+apenas um join de pessoas com seus respectivos endereços, logo no exemplo do nosso projeto para aqueles que executarem o
+script "user_scripts/carga.groovy" para preencher a base para fazer testes, verificarão que Pessoa_0 possui dois endereços
+um com o 'Estado_1' e outro com 'Estado_1_2', fazendo então com que Pessoa_0 mesmo possuindo um 'Estado_1' será retornado na
+consulta pois também possui 'Estado_1_2'. 
+<br>
+
+Então vamos as formas corretas de fazer a consulta proposta anteriormente. Existem 2 formas, a primeira é usando 'not exists' e a 
+segunda é usando operador 'not in' do SQL.
+<br>
+
+<b>Usando not exists</b>
+@@@ sql
+select  * from pessoa p  
+	where not exists 
+	(select pessoa_id from endereco  
+		where uf = 'Estado_1' and 
+		p.id = endereco.pessoa_id)
+@@@
+<br>
+<b>Usando o not in</b>
+@@@ sql
+select  * from pessoa p
+	where id not in 
+	(select pessoa_id from endereco
+		where uf = 'Estado_1' and p.id = endereco.pessoa_id)
+@@@
+<br>
+Finalmente vamos aos criterias geradores dos SQLs acima. Na duas forma vamos precisar de usar o DetachedCriteria, pois a consulta
+proposta anteriormente só seria possível usando o subqueries, como nos códigos SQLs acima. 
+<br>
+<b>DetachedCriteria</b> 
+@@@ js
+def criteriaEnderecoEstado1 = 
+​DetachedCriteria.forClass(Endereco.class, "end")
+.setProjection(Projections.property('end.pessoa.id'))
+.add(Restrictions.eqProperty('end.pessoa.id', 'p.id'))
+.add(Restrictions.eq('end.uf', 'Estado_1'))
+@@@
+<br>
+Na resolução do problema usando "not in" é que usamos o addToCriteria, o protagonista de todo nosso artigo.
+<br>
+<b>CriteriaBuilder usando o "not in"</b>
+@@@ js
+Pessoa.withCriteria{  
+  addToCriteria(
+  	Subqueries.propertyNotIn('id', criteriaEnderecoEstado1))
+}
+@@@
+
+<br>
+Peço desculpa ao leitor que esperava o uso "not exists" junto do criteria builder. Isso não foi possível pelo simples fato
+de não saber como gerar o alias para a classe de domínio "Pessoa" em questão. Entretanto se a subquery fosse em cima de 
+uma propriedade de associação existente isso seria possível com uso do método createAlias('nomeAssociacao', 'nomeAlias').
+<br>
+Note ainda que neste caso por se tratar do exists não seria necessário a projeção ".setProjection(Projections.property
+('end.pessoa.id'))", mas foi mantido porque no uso do "not in" ele é necessário.   
+<br>
+<b> Usando apenas criteria com "not exists"</b>
+@@@ js
+Pessoa.withSession { sessao ->
+  sessao.createCriteria(Pessoa.class, 'p')
+  .add(Subqueries.notExists(criteriaEnderecoEstado1))
+  .list()
+}
+@@@
+<br>
+<br>
+<h3>Conclusão</h3>
+<br>
+É notório que o uso do addToCriteria é util quando precisamos fazer coisas das quais seriam possíveis com o criteria do hibernate
+e não estão previstas pela DSL do gorm, como foi o caso do artigo o uso de subqueries no criteria. Bom para aqueles que acreditam
+que seja possível escrever subqueries com o criteria builder por favor postem ae, que eu alterarei o artigo.
+<br>
+<br>
+
+
+
+
+

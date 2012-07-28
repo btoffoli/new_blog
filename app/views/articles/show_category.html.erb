@@ -1,0 +1,11 @@
+<% content_for :header do %>
+  <%= auto_discovery_link_tag :atom, {:controller => :articles, :action => 'feed', :format => 'atom', :category => @category.url},
+                              :title => "Bruno Rocha Toffoli - #{@category.title}" %>
+<% end %>
+<h1><%= @category.title %></h1>
+
+<%=raw Markdown.new(@category.description.to_s).to_html %>
+
+<% @category.articles.each do |article| %>
+  <div><%= link_to article.title, :slug => article.url.to_s.split('/') %></div>
+<% end %>

@@ -1,0 +1,23 @@
+<% content_for :header do %>
+  <%= stylesheet_link_tag 'markdown/coderay' %>
+  <%= javascript_tag do %>
+    disqus_developer = 1
+  <% end if Rails.env.development? %>
+<% end %>
+<h1><%= @article.title %></h1>
+<div><%=l @article.created_at %> 
+	<%= '(' + t('article.updated_at', 
+	:date => l(@article.updated_at)) + ')' if @article.info['updated_at'] %>
+</div>
+
+<section class="content">
+  <%= @article.body_html %>
+</section>
+
+<section class="comments">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript" src="http://disqus.com/forums/blogsbtoffoli/embed.js"> </script>
+  <noscript><a href="http://blogsbtoffoli.disqus.com/?url=ref"><%= t('disqus.view_discussion_thread') %></a></noscript>
+  <a href="http://disqus.com" class="dsq-brlink"><%= t('disqus.comments_powered_by') %><span class="logo-disqus">Disqus</span></a>
+  <a name="comments"></a>
+</section>

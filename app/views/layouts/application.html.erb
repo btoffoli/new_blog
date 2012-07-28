@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<!-- *Do note Remove this* -->
+	<!--Designed by : Roshan
+	Website : www.ramblingsoul.com
+	email : c.pixels@gmail.com
+	-->
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<title>Bruno Rocha Toffoli</title>
+		<meta name="description" content="Here goes your description" />
+		<meta name="keywords" content="here, goes, your key, words, keywords,.." />
+		<meta name="author" content="Your Name" />
+		<%= stylesheet_link_tag 'style', :media => :screen %>
+		<%= javascript_include_tag 'http://www.google-analytics.com/ga.js' %>
+		<%= yield :header %>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="tophead"></div>
+			<div id="header">
+				<div id="logo">
+					<h1 class="logotext"><!-- <%= link_to "Bruno", root_locale_path(:locale => I18n.locale) %>--> B<span>r</span>u<span>n</span>o <span>T</span>o<span>f</span>f<span>o</span>l<span>i</span></h1>
+				</div>
+				<div id="navigation">
+					<ul>
+						<li>
+							<a title="Contact" href="#">Contact</a>
+						</li>
+						<li>
+							<%= link_to t('layout.navigation_menu.curriculum'), {:controller => 'site', :action => 'curriculum'}, :target => '_blank' %>
+						</li>
+						<li>
+							<%= link_to t('layout.navigation_menu.about'), :controller => 'site', :action => 'about' %>
+						</li>
+						<!--<li><a title="Home" class="current" href="#">Home</a></li>-->
+						<li>
+							<%= link_to t('layout.navigation_menu.home'), root_locale_path(:locale => I18n.locale) %>
+						</li>
+					</ul>
+				</div>
+				<div id="infobox">
+					<h1>Olá, Seja Bem Vindo!</h1>
+					<span>
+						<p>
+							Este é um espaço onde procuro organizar algumas informações que considero interessantes, voltadas principalmente para
+							desenvolvimento de sistemas para a web, além de pensamentos diversos sobre Informática em geral.
+						</p> </span>
+				</div>
+			</div>
+			<div id="sidenotes">
+				<div class="sidenav">
+					<ul>
+						<!--<li><%= link_to t('layout.navigation_menu.all_articles'), all_articles_path %></li>-->
+						<!--<li><%= menu_link 'Ruby / Rails', 'ruby-rails' %></li>-->
+						<% @categories.each do |category| %>
+						<li>
+							<%= menu_link "#{category.title}", category.url%>
+						</li>
+						<% end %>
+					</ul>
+				</div>
+			</div>
+			<div id="contents">
+				<%= yield %>
+			</div>
+			<div id="footer">
+				<div class="rsslinks">
+					<a href="#">Feeds Available </a>
+				</div>
+				<div class="footerinner">
+					&copy; Information Goes Here | Valid <a href="http://validator.w3.org/check?uri=referer">XHTML 1.1</a> and <a href="#">CSS 2.0 </a>
+				</div>
+			</div>
+		</div>
+		<div id="bottompage">
+			<div id="inner">
+				<span><a href="#">Back to Top</a></span>
+				<!--Removing this link back to my website will be violation of Creative Commons License, under which this template is released for download
+				-->
+				<a href="http://www.ramblingsoul.com" title="rambles and rants, Design portfolio, Brunei Web Designer">Design : RamblingSoul</a>
+				<!-- Copyright - Roshan -->
+			</div>
+		</div>
+		<%= javascript_tag do %>
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-25343576-1']);
+			_gaq.push(['_setDomainName', '.btoffoli.com']);
+			_gaq.push(['_trackPageview']);
+	
+			(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+		<% end if Rails.env.production? %>
+	</body>
+</html>

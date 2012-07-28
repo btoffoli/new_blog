@@ -1,0 +1,115 @@
+<%= content_for :header do %>
+  <style type="text/css">
+    body > section img {width: 200px; margin: 0 1em}
+  </style>
+<% end %>
+<%= markdown_content do %>
+[About the author](#author)
+
+[About the site](#site)
+
+#<a name="author">About the author</a>
+
+<%= hosted_image_tag 'eu-chapeu.jpg', :alt => 'Me with a hat', :style => 'float: left' %>
+<%= hosted_image_tag 'sabrina-rodrigo-com-nuvens.jpg', :alt => 'Sabrina and Rodrigo', :style => 'float: right' %>
+
+I am a lover of good music, surfing, Science & Technology, besides my adorable wife, of course.
+
+<p style="clear:right">Since I was a kid, I am curious about several subjects such as machines, life, universe,
+musical instruments, human psychology and everything else that interest me. In other words, I was a typical child. And,
+like every child, the primary means to satisfy the curiosity is through experimentation. This typically involved
+disassembling (and assembling again) my clock, all broken equipments (and some more that were not broken yet), trying to
+fix them and create new great stuff, such as building a hut, mixing elements to see what happens (what I would understand
+later that it was part of the Chemistry science, which is coincidentally the formation area of my wife), in addition to
+creating music.</p>
+
+<%= hosted_image_tag 'rodrigo-cavaco.jpg', :alt => 'Rodrigo with a cavaco', :style => 'float: right' %>
+
+I must confess that I was not good in any of that, except maybe with the clocks and some electronic equipments with
+poor contact, but that didn't matter either. The final result was less interesting to me than learning. For some reason,
+after this stage, strangely, schools (at least in Brazil) seem to create a feeling on students that studying is a boring
+task and lots of them get away from science, exactly when they start frequenting schools.
+
+<%= hosted_image_tag 'rodrigo-violao-noel.jpg', :alt => 'Rodrigo with the guitar', :style => 'float: left' %>
+
+That didn't happen to me. Despite the discouragement caused by schools (and I've studied in lots of them in my childhood,
+so that was not a problem specific to some schools), I always have been curious. Eventually, I ended up dedicating
+myself to some specific areas and lost the general interest I had when I was a child. School takes us a lot of time,
+leaving too little time for practicing science, studying and experimenting with scientific methods.
+
+The interest in electronics led me through an Electrical Engineering formation, although I was also interested in
+Computer and Mechanics. My father always incentived me on studying computers, since I was 10 years old. He was a partner
+in a TI company and, watching my interest on computers and electronics, in general, enrolled me in several courses, as
+DBase3/DOS, Clipper, Delphi and others over time. Interestingly, none of these courses was the basis of knowledge I
+acquired with computers. Most came from experimentation and research on my own. The courses followed the traditional
+model of schools, providing cookbooks, instead of explaining the concepts behind the presented code.
+
+<%= hosted_image_tag 'rodrigo-rails-summit-2009.jpg', :alt => 'Rodrigo on Rails Summit 2009', :style => 'float: right' %>
+
+Studying on my own, I learned a lot about operating systems and programming in general, experiencing over the years
+several programming languages, through the compiled ones as Clipper, C/C++, (Object) Pascal, Assembly and Java, to
+scripting languages such as Perl, Matlab, Scilab, shell scripting, VBScript, Ruby, Groovy and JavaScript. I confess that
+I have not had interest yet in purely functional languages such as LISP and Haskell. I also read a little about Scala
+and it seems to be an interesting language to what it is proposed for.
+
+<%= hosted_image_tag 'sabrina-rodrigo-santa-teresa.jpg', :alt => 'Rodrigo and Sabrina at Santa Teresa', :style => 'float: left' %>
+
+I was also a bit curious to know PHP and Python, but I didn't find any useful additional features when compared to other
+languages I already knew. I don't like to be forced to organize my code with a fixed rule (the forced indentation of
+Python and the lack of a block terminator) and I think that PHP was designed to be an alternative to ASP, encouraging a
+code style that is a mixture of HTML and programming logic, which is bad for maintenance of a system. Later, there were
+frameworks for PHP to promote a MVC model, inspired by Rails and others, but I see no advantage when compared to the
+original ones.
+
+The languages to which I paid more attention were C, C++ and Ruby, but has had enough experience with Delphi and Perl
+with some work I've done. And, as Ruby is currently my favorite language, most of the technical papers of this site will
+talk about Ruby and Rails, my favorite framework for Web development.
+
+#<a name="site">About the site</a>
+
+## Why another site/blog?
+
+Good question. In fact, fortunately, there are excellent sources of knowledge available on the web about the various
+existent technologies, especially in computer science and programming. I've subscribed for several blog feeds that I
+read every day by really smart authors. So this is a valid question: why another one?
+
+It turns out that each individual has their own experience, accumulated over time and observe differently the same
+situation observed by another individual. In addition, each one has their way of reporting this experience. Likewise,
+each individual learns best with a different writing style. Therefore, I believe that there is no limit to the amount of
+good available information, whether in books, websites or blogs.
+
+I intend to address the subjects in my articles here in the way I would like to read them. The more I think about the
+difficulty that beginners have to assimilate all this technology and select which source of information to look for,
+the more I worry about them. So I decided to create a more complete material dealing with basic to advanced in a way
+that a layman can follow investing as little time as possible.
+
+The strategy that I outlined to achieve this goal was to start with a series of articles that would become in the future
+parts of a more organized and complete material. I also want to share some thoughts about issues that have interested me
+as well as exchanging experiences in the form of comments.
+
+## Why not a traditional blog?
+
+The trend is very strong for building blogs. I understand perfectly, because through them, it is possible that a
+non-technical person in the area of web design can express their opinions and share information easily. But is this the
+best option for those who have no problem in organizing their sites in a custom way?
+
+I never really liked blogs. First, I do not like the name "blog" or "weblog" (my site is not a log), but this is not the
+main reason. A blog is also a site, but taking a look at the self-declared blogs out there, I associated this concept to
+some form of organization of a site. In this model, the articles are treated as disposable short-lived information.
+This is not my intention.
+
+Furthermore, the search for new articles is favored but, in the other side, finding old news is not that easy.
+Organization is accomplished purely by date or, additionally, by tags that say not much. The idea is that an article
+should be rarely updated and it is natural that it would become obsolete shortly. Definitely, this is not the project I
+have for my site.
+
+However, blogs also have good ideas. The main one, in my opinion, is the availability of news feeds. With them, one can
+follow the news that are being written by someone or organization in a news aggregator, without the need to often access
+the site / blog or having to sign up for mailing lists. The second best idea is the interaction with readers in the form
+of comments. This enables rich discussions, where all players benefit.
+
+Summarizing, this site is organized the way that I believe is the most efficient one to organize several subjects. I do
+hope you find something of value in the available content and I will be happy to discuss these issues through the comments.
+
+Enjoy a good reading!
+<% end %>

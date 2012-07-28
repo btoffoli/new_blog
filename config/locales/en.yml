@@ -1,0 +1,13 @@
+en:
+  layout:
+    navigation_menu:
+     title: "Navigation menu"
+     about: "About author/site"
+     all_articles: "All articles"
+     curriculum: "Curriculum Vitae"
+  article:
+    updated_at: "Updated at %{date}"
+    not_found: "Article not found"
+  disqus:
+    view_discussion_thread: "View the discussion thread."
+    comments_powered_by: "comments powered by"

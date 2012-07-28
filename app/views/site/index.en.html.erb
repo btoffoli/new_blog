@@ -1,0 +1,9 @@
+<p>This is a place where I intend to organize and share some interesting thoughts, mainly on web systems development,
+  besides other subjects with greater emphasis on computers related ones.</p>
+
+<p>I hope we both can grow with our discussions through comments in the articles published in this site. Have fun!</p>
+
+<div>Last articles:</div>
+<% Article.all[0..4].each do |article| %>
+  <div><%= link_to article.title, slug_url(:slug => article.url) %></div>
+<% end %>

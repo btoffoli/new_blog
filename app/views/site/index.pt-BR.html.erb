@@ -1,0 +1,18 @@
+
+<div>Últimos artigos:</div>
+<% @last_articles.each do |article| %>
+  <div class="post">
+    <h2 class="title"><%=article.title%></h2>
+    <p class="byline">
+      <small>
+        <%=article.updated_at%>
+      </small>
+    </p>
+    <div class="entry"><%= article.summary %></div>
+    <p class="blogbottom">
+      <%= link_to 'Ler', slug_url(:slug => article.url) %>
+      <%= link_to 'Comentários', slug_url(:slug => article.url)+'#comments' %>
+      <hr>
+    </p>
+  </div>
+<% end %>

@@ -1,0 +1,68 @@
+---
+created_at: 16/03/2010 20:40
+title: "Site's Debut"
+updated_at: 
+slug_pt-BR: 2010-03-12-inauguracao-do-site
+
+For my first article, I chose to write about the reasons that resulted in my decision to finally develop my site, as
+well as talking about its technical structure and why I have taken such approach.
+
+## Motivation
+
+I have been considering writing my site for a long while. There were lots of subjects I had interest in writing about,
+but for several years I really had no free time to do it. There were tons of distractions I had to deal with: graduation,
+writing my master thesis, looking for jobs, working, marriage, more working. When I had some time at night, I was
+really exhausted.
+
+During this time, I considered using some ready to deploy system, such as [Blogger](http://www.blogger.com/),
+[Wordpress](http://wordpress.org/) and others, but I didn't like the idea of loosing control over by articles. Although
+customizing Wordpress was an option, it is written in PHP, so, in short: no, thanks. I wanted my site to be exactly as
+I desired and these tools wouldn't allow me total flexibility over it and I guessed it would be too hard to migrate all
+my articles to a new system later if I decided to.
+
+When I found some available time at night, I came to think in building my own site, in my way, with
+[Rails](http://rubyonrails.org/). But I always faced the same problem. I wasn't inclined to invest money regularly on
+some hosting provider when I didn't intended any payback from my site. I never found a free hosting service either that
+supported Rails and neither was willing to develop my site with other framework.
+
+Recently, lots of blogs that I follow commented about [Toto](http://cloudhead.io/toto). So many of them that I decided
+to get a deeper understanding of it and doing some tests. Toto is a blog system written in about 300 lines of Ruby code,
+in top of [Rack](http://rack.rubyforge.org/).
+
+Toto was the reason that made me decide to finally write my site. These were the main ideas that inspired this site
+design:
+
+1. The articles get stored on disk, instead of a database. This allows easy version management of the articles, using
+   my favorite version control system: [Git](http://git-scm.com/).
+2. Comments are managed by [Disqus](http://disqus.com), a system I had never heard of before and that is just fantastic!
+3. Finally, the main reason was that Toto increased my interest in [Heroku](http://heroku.com/). I had already read
+   about it before, but every time I tried to understand what was it about, I didn't get the idea instantly and, with
+   little time to read all my feeds, I ended up not being interested enough for digging deeper. After reading more about
+   Toto, I understood that Heroku was a service that would allow me to host a Ruby web application with no cost. My
+   sincerely thanks to Toto and Heroku who made this site possible!
+
+## Why not Toto?
+
+My first attempt was doing exactly Toto's recommended procedure. As long as I developed my site with Toto, I faced some
+obstacles:
+
+1. The first one was related to code highlighting. This one was easy to solve after following some instructions found
+   in some blogs, explaining how to embed [CodeRay](http://coderay.rubychan.de/) in Toto, for instance.
+2. The next challenge was about internationalization. I wanted to write articles both in English and Portuguese. I
+   wanted some support for internationalization and Toto didn't worry about this, as it was designed to be minimalistic.
+   I don't blame it, but this was a concern while writing deciding or not to use Toto.
+3. Finally, I wanted to group my articles in directories for organizing the articles by topics such as
+   [Ruby](http://www.ruby-lang.org)/Rails, general programming, operating systems, infrastructure, etc.
+
+Fortunately, Toto is so compact and well written that it is a trivial task to adapt it in a full Rails application and
+change it to meet my expectations. Rails has I18n native support, so I only needed to implement the topics organization.
+
+Basically, the main ideas implemented on this site were extracted from Toto. I'm very grateful to its creator
+[Alexis Sellier](http://cloudhead.net/cv/) for the inspiration that resulted on this site.
+
+No databases are being used for now. Site statistics are handled by [Google Analytics](http://www.google.com/analytics/).
+The images used in this site are hosted at [ImageCave](imagecave.com) and [Ultraviolet](http://ultraviolet.rubyforge.org/)
+is the installed code highlighter. [RDiscount](http://github.com/rtomayko/rdiscount) was chosen for parsing
+[Markdown](http://daringfireball.net/projects/markdown/).
+
+Given the opening, I hope you enjoy the next articles.

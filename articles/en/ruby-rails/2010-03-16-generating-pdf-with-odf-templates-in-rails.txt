@@ -1,0 +1,18 @@
+--- 
+created_at: 16/03/2010 21:00
+title: Generating PDF with ODF templates in Rails
+updated_at: 
+slug_pt-BR: 2010-03-14-geracao-de-pdf-com-rails-a-partir-de-modelos-odf
+
+In 2009, I wrote an article for the [Rails Magazine](http://railsmagazine.com) Issue #4 - The Future of Rails - where
+I presented an alternative to PDF generation from ODF templates, which can be generated using a regular text processor
+such as OpenOffice.org or Microsoft Office (after converting the document to ODF).
+
+You can read the entire article [downloading this magazine for free](http://railsmagazine.com/issues/4) or
+[purchasing](http://magcloud.com/browse/issue/32751) it. The application code illustrating this approach was published
+by the magazine on [Github](http://github.com/railsmagazine/rmag_downloads/tree/master/issue_4/rodrigo_rosas_genpdf/).
+
+Unfortunately, I can't host a working system providing a live demonstration due to my [Heroku](http://heroku.com) count
+limitations, but it should be easy to follow the instructions in the article on your development or production environment.
+
+Do not hesitate to sending me any questions, through comments on this site or by e-mail, if you prefer.
