@@ -2,17 +2,26 @@
 created_at: 30/08/2011 15:00
 title: Melhorando seu eclipse
 
-Para aqueles que desenvolvem em grails 
- * Baixe direto o Spring Source Tool Suite (STS) mais recente
- * Quando o Dashboard do STS abrir marque os suporte a groovy e grails para instalação
- * Para aqueles que desenvolvem com java e outros linguagens que usam o editor do eclipse default
-é possível baixar um plugin que julgo ser bem legal chamado "The Eclipse Color Theme Plugin" você pode encontra-lo http://www.eclipsecolorthemes.org/?view=plugin
+Há algum tempo atrás precisei voltar ao tempo e lançar mão de uma IDE gratuita para poder depurar alguns dos meus projetos. Só que eu não queria ter diferentes IDEs para cada projeto, sendo assim, ao pesquisar por IDEs, acabei ficando com o eclipse, que é gratuíto e possui suporte a diferentes tipos de linguagens e frameworks para as mesmas.
+
+Logo lancei uma pesquisa de plugins para eclipse que fizesse com que o mesmo suportasse as diferentes linguagens e frameworks nos quais eu desenvolvo. O resultado pode ser lido abaixo.
+<br>
+
+
+Para aqueles que desenvolvem em grails recomendo baixar direto o Spring Source Tool Suite (STS) mais recente, então quando o dashboard do STS abrir marque os suporte a groovy e grails para instalação.
+<br>
+
+Se você é desenvolvedor java e outras linguagens que usam o editor do eclipse default
+é possível baixar um plugin que julgo ser bem legal chamado "The Eclipse Color Theme Plugin" você pode encontra-lo em http://www.eclipsecolorthemes.org/?view=plugin
 ou podem ir diretamente em "Help" → "Install New Software", pressione "Add Site" and coloque o nome "Eclipse Color Theme" e na url "http://eclipse-color-theme.github.com/update", então aguarde  atualização
 do eclipse quanto aos pacotes e instale-os.
+<br>
 
-Para aqueles que desenvolvem em ruby-rails e pyton-django recomente fortemente o aptana studio 3 que pode ser baixado e em http://www.aptana.com/downloads/start
-ou usando o mesmo processo de instalação de plugin citado para o plugin do STS usando o link "http://download.aptana.com/studio3/plugin/install".
-"The Eclipse Color Theme Plugin" mas usando a url  "http://eclipse-color-theme.github.com/update"
+
+Se você ainda for desenvolvedor ruby-rails e/ou pyton-django recomendo fortemente o aptana studio 3 que pode ser baixado e em http://www.aptana.com/downloads/start, ou também poderá usar o mesmo processo de instalação de plugin citado para o plugin do STS, só que agora usando o link "http://download.aptana.com/studio3/plugin/install".
+
+<br>
+Lembrando que o plugin "The Eclipse Color Theme Plugin" recomendo para qualquer situação, pois o seu objetivo é apenas deixar os editores de texto do eclipse mais facilmente configurável, lançando mão de temas de cores já configurados.
 
 
 
