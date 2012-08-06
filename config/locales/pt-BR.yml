@@ -11,6 +11,7 @@ pt-BR:
      about: "Sobre"
      home: "Início"
      curriculum: "Curriculum Vitae"
+     feeds: "Feeds do Blog"
   article:
     updated_at: "Atualizado em %{date}"
     not_found: "Artigo não encontrado"

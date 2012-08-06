@@ -25,7 +25,7 @@
 				<div id="navigation">
 					<ul>
 						<li>
-							<a title="Contact" href="#">Contact</a>
+							<a title="Contato" href="#">Contato</a>
 						</li>
 						<li>
 							<%= link_to t('layout.navigation_menu.curriculum'), {:controller => 'site', :action => 'curriculum'}, :target => '_blank' %>
@@ -66,11 +66,8 @@
 			</div>
 			<div id="footer">
 				<div class="rsslinks">
-					<a href="#">Feeds Available </a>
-				</div>
-				<div class="footerinner">
-					&copy; Information Goes Here | Valid <a href="http://validator.w3.org/check?uri=referer">XHTML 1.1</a> and <a href="#">CSS 2.0 </a>
-				</div>
+					<%= link_to t('layout.navigation_menu.feeds'), :controller => 'site', :action => 'about' %>
+				</div>				
 			</div>
 		</div>
 		<div id="bottompage">

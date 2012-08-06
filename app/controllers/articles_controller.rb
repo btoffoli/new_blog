@@ -1,4 +1,5 @@
 class ArticlesController < ApplicationController
+  
   def index
     @articles = Article.all('**')
     respond_to do |format|
@@ -27,9 +28,11 @@ class ArticlesController < ApplicationController
   end
 
   def feed
-    category = Category.find params[:category]
-    @articles = category.articles
-    @title = "Bruno Rocha Toffoli - #{category.title}"
+    # @category = Category.find params[:category]
+    puts "ssscategory -> #{@category}"
+    @articles = @category ? @category.articles : Article.all? { '**' }
+    @title = "Bruno Rocha Toffoli - #{@category.title}"
     respond_to {|f| f.atom}
   end
+
 end

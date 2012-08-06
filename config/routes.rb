@@ -66,7 +66,7 @@ Toffoli::Application.routes.draw do
     get 'articles/:slug' => 'articles#show'
     get 'articles/:category.atom' => 'articles#feed', :format => 'atom', :as => 'category_feed'
     get 'articles/*slug' => 'articles#show', :as => 'slug'
-
+    get 'articles/feed' => 'articles#feed', :as => 'feed'
     match ':controller(/:action(/:id(.:format)))'
   end
 end
