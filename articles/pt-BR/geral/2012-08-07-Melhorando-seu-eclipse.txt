@@ -1,5 +1,5 @@
 ---
-created_at: 30/08/2011 15:00
+created_at: 07/08/2012 10:00
 title: Melhorando seu eclipse
 
 Há algum tempo atrás precisei voltar ao tempo e lançar mão de uma IDE gratuita para poder depurar alguns dos meus projetos. Só que eu não queria ter diferentes IDEs para cada projeto, sendo assim, ao pesquisar por IDEs, acabei ficando com o eclipse, que é gratuíto e possui suporte a diferentes tipos de linguagens e frameworks para as mesmas.
